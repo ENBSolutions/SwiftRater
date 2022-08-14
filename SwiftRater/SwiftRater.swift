@@ -190,6 +190,11 @@ import StoreKit
     @objc public static func reset() {
         UsageDataManager.shared.reset()
     }
+    
+    @objc public static func openAppStoreForRating() {
+        SwiftRater.shared.rateAppWithAppStore()
+        UsageDataManager.shared.isRateDone = true
+    }
 
     private func perform() {
         if SwiftRater.appName != nil {
@@ -329,11 +334,10 @@ import StoreKit
         } else {
             let alertController = UIAlertController(title: titleText, message: messageText, preferredStyle: .alert)
             
-            let rateAction = UIAlertAction(title: rateText, style: .default, handler: {
-                [unowned self] action -> Void in
-                self.rateAppWithAppStore()
-                UsageDataManager.shared.isRateDone = true
-            })
+            let rateAction = UIAlertAction(title: rateText, style: .default) { _ in
+                Self.openAppStoreForRating()
+            }
+            
             alertController.addAction(rateAction)
             
             if SwiftRater.showLaterButton {
